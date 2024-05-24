@@ -34,7 +34,7 @@ function OnSubmit() {
         localStorage.setItem("fullName", fullname);
         localStorage.setItem("email", email);
         localStorage.setItem("loanAmount",loanAmt);
-        window.location.href = '/htmlfiles/confirm.html';
+        window.location.href = 'confirm.html';
     }
 }
 function onValidateFullName() {

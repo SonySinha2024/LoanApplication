@@ -25,7 +25,7 @@ function OnProceed() {
     }
     // Allow user to proceed only if no errors
     if (errors == 0) {
-      window.location.href = '/htmlfiles/loantenure.html';
+      window.location.href = 'loantenure.html';
     }
 }
 
