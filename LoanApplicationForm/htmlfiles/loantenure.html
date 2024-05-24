@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loan Tenure Details</title>
+    <link rel="stylesheet" type="text/css" href="../styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="loggedInUser" id="user-info">
+            <span id = "DisplayUsername"></span>
+            <br><br>
+            <input type="button" id="logOutBtn" value="Log Out" class = "logOutButton" onclick="logOut()">
+        </div>
+        <form id="loanTenureDetails">
+            <h1 class="center">LOAN TENURE DETAILS</h1>
+            <label for="loanDuration">Select Loan Tenure</label>
+            <select id="tenureSelect" onchange = "setInterestRate()" width = 1000px>
+                <option value="1">1 year</option>
+                <option value="2">2 years</option>
+                <option value="3">3 years</option>
+                <option value="4">4 years</option>
+                <option value="5">5 years</option>
+                <option value="6">6 years</option>
+                <option value="7">7 years</option>
+            </select>
+            <br>
+            <label for="interestRate">Interest Rate:</label>
+            <span id="interestRate">Please select a loan tenure to view interest rate.</span>
+            <br>
+            <input type="button" id="estimateEMIBtn" value="Estimate Monthly EMI" class="btnformatter" onclick="estimateEMI()">
+            <div id="estimatedEMI"></div>
+        </form>
+    </div>    
+    <script>
+        // Get User Session details
+        loggedinUser = localStorage.getItem("Username");
+        document.getElementById("DisplayUsername").textContent = `Username :${loggedinUser}`;
+        
+        function logOut() {
+        // Clear user session
+        loggedinUser = '';
+        document.getElementById("DisplayUsername").textContent = `Username:${loggedinUser}`;
+        localStorage.setItem("Username","");
+        }
+
+    // fix interest Rates as per Tenure
+     interestRates = {
+        1: 9.5,
+        2: 9.1,
+        3: 8.7,
+        4: 8.2,
+        5: 7.7,
+        6: 7.2,
+        7: 6.8,
+    };
+
+    // Set the Interest Rate based on Selected tenure value from DropDown
+    function setInterestRate(){
+    const durationSelect = document.getElementById('tenureSelect');
+    selectedDuration = durationSelect.value;
+    const intRate = interestRates[selectedDuration];
+    document.getElementById("interestRate").innerText = `Rate of Interest: ${intRate}%`;
+    }
+
+    // Estimate monthly EMI amount based on Loan Amount, Rate of Interest and number of months
+    function estimateEMI(){
+    const durationSelect = document.getElementById('tenureSelect');
+    selectedDuration = durationSelect.value;
+    const intRate = interestRates[selectedDuration]; 
+    loanAmount = localStorage.getItem("loanAmount");
+    const numberOfmonths = selectedDuration * 12;
+    const interest = (loanAmount  * (intRate * 0.01)) / numberOfmonths ;
+    const monthlyEMI = ((loanAmount / numberOfmonths) + interest).toFixed(2);
+    document.getElementById("estimatedEMI").innerText = `Estimated monthly EMI for loan Amount - ${loanAmount} Submitted is Rs ${monthlyEMI}.`;
+    }
+    </script>
+</body>
+</html>
+
+
