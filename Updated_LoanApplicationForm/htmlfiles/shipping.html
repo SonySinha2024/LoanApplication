@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shipping Details</title>
+    <link rel="stylesheet" type="text/css" href="/cssfiles/styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="loggedInUser" id="user-info">
+            <span id = "DisplayUsername"></span>
+            <br><br>
+            <input type="button" id="logOutBtn" value="Log Out" class = "logOutButton" onclick="logOut()">
+        </div>
+        <form id="shippingDetails">
+            <h1 class="center">SHIPPING DETAILS</h1>
+            <label for="fullName">Full Name:</label>
+            <input type="text" id="fName" name="fullName" required placeholder="Enter your Full Name">
+            <br>
+
+            <label for="address1">Address Line 1:</label>
+            <input type="text" id="address1" name="address1" required placeholder="Enter Address Line1">
+            <br>
+
+            <label for="address2">Address Line 2:</label>
+            <input type="text" id="address2" name="address2" placeholder="Enter Address Line2">
+            <br>
+
+            <label for="city">City:</label>
+            <input type="text" id="city" name="city" required placeholder="Enter City" onchange = "validateCity()">
+            <span id = "cityvalmsg"></span>
+            <br>
+
+            <label for="state">State/Province:</label>
+            <input type="text" id="state" name="state" required placeholder="Enter State/Province" onchange = "validateState()">
+            <span id = "statevalmsg"></span>
+            <br>
+
+            <label for="postalCode">Zip/Postal Code:</label>
+            <input type="text" id="postalCode" name="postalCode" required placeholder="Enter Zip/Postal Code" onchange = "validatePostalCode()">
+            <span id = "postalcodevalmsg"></span>
+            <br>
+
+            <label for="country">Country:</label>
+            <input type="text" id="country" name="country" required placeholder="Enter country" onchange = "validateCountry()">
+            <span id = "countryvalmsg"></span>
+            <br>
+            <input type="button" id="proceedBtn" value="Proceed To Loan Tenure Selection" class="btnformatter" onclick="OnProceed()">
+        </form>
+    </div>
+    <script src="/jsfiles/shipping.js"></script>
+    <script>
+        var fullname = localStorage.getItem("fullName");
+        document.getElementById('fName').setAttribute('value', fullname);
+
+         // Get User Session details
+        loggedinUser = localStorage.getItem("Username");
+        document.getElementById("DisplayUsername").textContent = `Username :${loggedinUser}`;
+
+        function logOut() {
+        // Clear user session
+        loggedinUser = '';
+        document.getElementById("DisplayUsername").textContent = `Username:${loggedinUser}`;
+        localStorage.setItem("Username","");
+        }
+
+    </script>
+</body>
+</html>

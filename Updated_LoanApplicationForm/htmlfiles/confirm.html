@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirmation Page</title>
+    <link rel="stylesheet" type="text/css" href="/cssfiles/styles.css">
+</head>
+<body>
+    <h1>CONFIRMATION PAGE</h1>
+    <div id="otpConfirmationMessage"></div>
+    <div class="container">
+        <div class="loggedInUser" id="user-info">
+            <span id = "DisplayUsername"></span>
+            <br>
+            <input type="button" id="logOutBtn" value="Log Out" class = "logOutButton"  onclick="logOut()">
+        </div>
+        <form id="otpSubmissionForm">
+            <h1 class="center">OTP CONFIRMATION</h1>
+            <label for="otp">Enter OTP:</label>
+            <input type="text" id="otp" onchange = "otpValidate()" maxlength="4" required>
+            <span id ="otpValmsg"></span>
+            <br>
+            <button id = "validateOTPbtn"type="button" class="btnformatter" onclick="validateOTP()">SUBMIT OTP</button>
+        </form>
+    </div>
+    <script>
+        // Get User Session details
+        loggedinUser = localStorage.getItem("Username");
+        document.getElementById("DisplayUsername").textContent = `Username :${loggedinUser}`;
+    
+        function logOut() {
+        // Clear user session
+        loggedinUser = '';
+        document.getElementById("DisplayUsername").textContent = `Username:${loggedinUser}`;
+        localStorage.setItem("Username","");
+        }
+
+        document.getElementById('validateOTPbtn').disabled = true;
+        //Fetching Full name and Email values from local storage
+        var fullname = localStorage.getItem("fullName");
+        var email = localStorage.getItem("email");
+        // Fetch first name from full name
+        const firstName = fullname.substring(0, fullname.indexOf(' '));
+        // random number generation
+        const randomNumber = Math.floor(1000 + Math.random() * 9000);
+        console.log('Random Number:', randomNumber);
+        var chances = 0;
+        
+        // Inline validation of OTP
+        function otpValidate(){
+        const otpNumber = document.getElementById('otp').value;
+        otpVal = document.getElementById('otpValmsg');
+        // Blank check validation for OTP
+        if (otpNumber === '') {
+            otpVal.textContent = "Please enter the OTP";
+            document.getElementById('validateOTPbtn').disabled = true;
+                return;
+            }
+        else{
+        otpVal.textContent = "";
+        document.getElementById('validateOTPbtn').disabled = false;
+        }
+        
+        // Check whether OTP is a number
+        if(isNaN(otpNumber)){
+        otpVal.textContent = "OTP entered should be a number.";
+        document.getElementById('validateOTPbtn').disabled = true;
+        return;
+        }
+        else{
+        otpVal.textContent = "";
+        document.getElementById('validateOTPbtn').disabled = false;
+         }
+         // Check Length of OTP entered
+         if (otpNumber.length !== 4) {
+            otpVal.textContent="Please enter a 4-digit OTP.";
+            document.getElementById('validateOTPbtn').disabled = true;
+                return;
+             }
+        else{otpVal.textContent = "";
+        document.getElementById('validateOTPbtn').disabled = false;
+        }
+        }
+
+
+        // Function to validate OTP
+        function validateOTP() {
+            const otp = document.getElementById('otp').value;
+            chances++;
+            if (otp === randomNumber.toString()) {
+                // If OTP matched, OTP Confirmation Message generated
+                const otpConfirmationMessage = document.getElementById('otpConfirmationMessage');
+                // otpConfirmationMessage.textContent = `Dear ${firstName}, Your OTP is verified successfully,You will be redirected to pixel6.co(HomePage)`;
+                otpConfirmationMessage.textContent = `Dear ${firstName}, Your OTP has been verified successfully, Please enter Shipping Details on Next Page.`;
+                // Removing OTP form
+                document.getElementById('otpSubmissionForm').style.display = 'none';
+                // Redirect To Shipping Details Page after 1 second
+                setTimeout(function () {
+                   window.location.href = '/htmlfiles/shipping.html';
+                }, 1000);
+            } else {
+                // If OTP did not match with Random Number
+                if (chances < 3) {
+                    alert(`OTP entered does not match, You have ${3 - chances} chances left only.`);
+                } else {
+                    // If OTP did not match with Random Number even after 3 chances
+                    const otpConfirmationMessage = document.getElementById('otpConfirmationMessage');
+                    otpConfirmationMessage.textContent = `Entered OTP is incorrect, you will be redirected to 404(Page Not Found)`;
+                    // Removing OTP form
+                    document.getElementById('otpSubmissionForm').style.display = 'none';
+                    // Redirect to Status Code 404(Page not Found) after 1 second
+                    setTimeout(function () {
+                        window.location.href = "https://www.google.com/404";
+                    }, 1000);
+                }
+            }
+        }
+        const otpConfirmationMessage = document.getElementById('otpConfirmationMessage');
+        otpConfirmationMessage.textContent = `Dear ${firstName}, Thank you for your inquiry. A 4-digit verification number has been sent to your email(${email}),please enter it in the following box and submit for confirmation`;
+    </script>
+</body>
+</html>
